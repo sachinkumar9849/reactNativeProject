@@ -16,7 +16,7 @@ import axios from 'axios';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from 'expo-router';
 
-const SignUp = () => {
+const SignIn = () => {
   const navigation = useNavigation();
   // Form validation schema
   const validationSchema = Yup.object().shape({
@@ -84,7 +84,7 @@ const SignUp = () => {
           />
 
           <View className='absolute bottom-12 left-5'>
-          <TouchableOpacity onPress={() => navigation.navigate('sign-in')}>
+          <TouchableOpacity onPress={() => navigation.navigate('sign-up')}>
           <Image
               source={images.Arrow}
               resizeMode="cover"
@@ -92,38 +92,16 @@ const SignUp = () => {
             />
             </TouchableOpacity>
          
-            <Text className='text-[32px] font-semibold text-[#EEEEEE]'>Register</Text>
-            <Text className='text-[14px] font-normal text-[#EEEEEE] mt-3'>Already have an account?</Text>
+            <Text className='text-[32px] font-semibold text-[#EEEEEE] mb-3'>Sign in to your Account</Text>
+            <Text className='text-[14px] font-normal text-[#EEEEEE]  flex items-center'>Don’t have an account?
+              <TouchableOpacity onPress={()=>navigation.navigate("sign-in")}>
+              <Text className="text-[#F3C074] text-[14px] font-semibold">Sign Up</Text>
+              </TouchableOpacity>
+            </Text>
           </View>
         </View>
         <View className='p-5'>
-          <View className="flex-row space-x-4 mb-4">
-            <View className="flex-1">
-              <TextInput
-                className="border border-gray-300 rounded-md p-2"
-                placeholder="First Name"
-                value={formik.values.first_name}
-                onChangeText={formik.handleChange('first_name')}
-                onBlur={formik.handleBlur('first_name')}
-              />
-              {formik.touched.first_name && formik.errors.first_name && (
-                <Text className="text-red-500 text-xs mt-1">{formik.errors.first_name}</Text>
-              )}
-            </View>
-
-            <View className="flex-1">
-              <TextInput
-                className="border border-gray-300 rounded-md p-2"
-                placeholder="Last Name"
-                value={formik.values.last_name}
-                onChangeText={formik.handleChange('last_name')}
-                onBlur={formik.handleBlur('last_name')}
-              />
-              {formik.touched.last_name && formik.errors.last_name && (
-                <Text className="text-red-500 text-xs mt-1">{formik.errors.last_name}</Text>
-              )}
-            </View>
-          </View>
+         
           <TextInput
             style={styles.input}
             placeholder="Email"
@@ -149,55 +127,20 @@ const SignUp = () => {
 
 
 
-          <TextInput
-            style={styles.input}
-            placeholder="Country ID"
-            keyboardType="numeric"
-            value={formik.values.country_id}
-            onChangeText={formik.handleChange('country_id')}
-            onBlur={formik.handleBlur('country_id')}
-          />
+     
           {formik.touched.country_id && formik.errors.country_id && (
             <Text style={styles.error}>{formik.errors.country_id}</Text>
           )}
 
-          <TextInput
-            style={styles.input}
-            placeholder="Phone"
-            keyboardType="numeric"
-            value={formik.values.phone}
-            onChangeText={formik.handleChange('phone')}
-            onBlur={formik.handleBlur('phone')}
-          />
-          {formik.touched.phone && formik.errors.phone && (
-            <Text style={styles.error}>{formik.errors.phone}</Text>
-          )}
-
-          <View style={styles.checkboxContainer}>
-            <TouchableOpacity
-              style={styles.checkbox}
-              onPress={() => formik.setFieldValue('is_agreement', !formik.values.is_agreement)}
-            >
-              <View
-                style={[
-                  styles.checkboxInner,
-                  formik.values.is_agreement && styles.checkboxChecked,
-                ]}
-              />
-            </TouchableOpacity>
-            <Text style={styles.checkboxLabel} className='text-[#6C7278]'>By creating an account, I agree to follow the Terms of Service and Data Processing Agreement.</Text>
-          </View>
-          {formik.touched.is_agreement && formik.errors.is_agreement && (
-            <Text style={styles.error}>{formik.errors.is_agreement}</Text>
-          )}
+        
 
           <TouchableOpacity style={styles.button} className='mt-5' onPress={formik.handleSubmit}>
             <Text style={styles.buttonText}>Register</Text>
           </TouchableOpacity>
           <View className="mt-4 flex-row justify-center">
-            <Text className="text-[#0A0A0B] text-[12px] font-normal">Already have an account? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('sign-in')}>
-              <Text className="text-[#1D4F95] text-[12px] font-semibold">Login here</Text>
+            <Text className="text-[#0A0A0B] text-[14px] font-normal">Don’t have an account? </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('sign-up')}>
+              <Text className="text-[#1D4F95] text-[14px] font-semibold">Sign Up</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -266,4 +209,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUp;
+export default SignIn;
