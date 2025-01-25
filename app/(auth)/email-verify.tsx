@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TextInput,
   Alert,
+  Modal,
 } from 'react-native';
 import { images } from '@/constants';
 import axios from 'axios';
@@ -18,6 +19,7 @@ const EmailVerify = () => {
   const [verificationCode, setVerificationCode] = useState('');
   const [email, setEmail] = useState('');
   const [userId, setUserId] = useState(null);
+  const [isModalVisible ,setModalVisible] = useState(false);
 
   console.log("email",email);
 
@@ -44,8 +46,8 @@ const EmailVerify = () => {
       );
 
       if (response.data.success) {
-        Alert.alert('Success', 'Email verified successfully.');
-        navigation.navigate('sign-in');
+       setModalVisible(true);
+
       }
     } catch (error) {
       Alert.alert(
@@ -55,8 +57,36 @@ const EmailVerify = () => {
     }
   };
 
+  const handleModalClose = ()=>{
+    setModalVisible(false);
+    navigation.navigate('sign-in');
+  }
+
   return (
     <View style={styles.container} className='bg-white p-5'>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={handleModalClose}
+      >
+        <View style={styles.modalContainer}>
+          <View className='text-center' style={styles.modalContent}>
+           
+            <Text className='text-[16px] text-center font-semibold leading-5 text-[#151B25]'>Your email is verified! 
+            Now, verify your phone to continue and unlock all features</Text>
+            <View className='my-8'>
+        <Image source={images.verifiedEmail} resizeMode="cover" />
+      </View>
+            <TouchableOpacity 
+              style={styles.modalButton} 
+              onPress={handleModalClose}
+            >
+              <Text style={styles.modalButtonText}>Next</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <View className='mt-8'>
         <Image source={images.LoginVerify} resizeMode="cover" />
       </View>
@@ -135,6 +165,42 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 40,
+    alignItems: 'center',
+    width: '80%',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  modalMessage: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButton: {
+    backgroundColor: '#1D4F95',
+    padding: 10,
+    borderRadius: 8,
+    width: '100%',
+    alignItems: 'center',
+   
+  },
+  modalButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+
   },
 });
 
