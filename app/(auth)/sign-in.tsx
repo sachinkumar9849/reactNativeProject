@@ -93,11 +93,12 @@ const SignIn = () => {
             </TouchableOpacity>
          
             <Text className='text-[32px] font-semibold text-[#EEEEEE] mb-3'>Sign in to your Account</Text>
-            <Text className='text-[14px] font-normal text-[#EEEEEE]  flex items-center'>Don’t have an account?
+            <View className='flex items-center flex-row'>
+              <Text className='text-[14px] font-normal text-[#EEEEEE]'>Don’t have an account?</Text>
               <TouchableOpacity onPress={()=>navigation.navigate("sign-in")}>
-              <Text className="text-[#F3C074] text-[14px] font-semibold">Sign Up</Text>
+              <Text className="text-[#F3C074] text-[14px] font-semibold ml-1">Sign Up</Text>
               </TouchableOpacity>
-            </Text>
+            </View>
           </View>
         </View>
         <View className='p-5'>
