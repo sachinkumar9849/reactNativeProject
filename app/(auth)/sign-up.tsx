@@ -18,9 +18,8 @@ import { useNavigation } from 'expo-router';
 
 const SignUp = () => {
   const navigation = useNavigation();
-  // Form validation schema
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email').required('Email is required'),
+
     password: Yup.string()
       .min(6, 'Password must be at least 6 characters')
       .required('Password is required'),
@@ -48,13 +47,27 @@ const SignUp = () => {
     validationSchema,
     onSubmit: async (values, { resetForm, setErrors }) => {
       try {
+        console.log("Submittion values1=>", values);
         const response = await axios.post(
           'https://jobklik-develop.mantraideas.com.np/api/v1/candidate/register',
           values
         );
-        Alert.alert('Success', response.data.message);
-        resetForm();
+        console.log("Response 2=>:", response.data);
+        if (response.data.success || response.data.succes) {
+          Alert.alert('Success', response.data.message);
+          navigation.navigate('email-verify', {
+            email: values.email,
+            verificationCode: response.data.data.user.email_verification_code,
+            userId: response.data.data.user_id,
+          });
+          resetForm();
+        } else {
+          Alert.alert("Error", "Unexpected response");
+        }
+        
+
       } catch (error) {
+        console.error('Error:', error.response?.data || error.message);
         if (error.response?.status === 422 && error.response.data?.errors) {
 
           setErrors({
@@ -84,14 +97,14 @@ const SignUp = () => {
           />
 
           <View className='absolute bottom-12 left-5'>
-          <TouchableOpacity onPress={() => navigation.navigate('sign-in')}>
-          <Image
-              source={images.Arrow}
-              resizeMode="cover"
-              className="mb-7"
-            />
+            <TouchableOpacity onPress={() => navigation.navigate('sign-in')}>
+              <Image
+                source={images.Arrow}
+                resizeMode="cover"
+                className="mb-7"
+              />
             </TouchableOpacity>
-         
+
             <Text className='text-[32px] font-semibold text-[#EEEEEE]'>Register</Text>
             <Text className='text-[14px] font-normal text-[#EEEEEE] mt-3'>Already have an account?</Text>
           </View>
@@ -196,7 +209,7 @@ const SignUp = () => {
           </TouchableOpacity>
           <View className="mt-4 flex-row justify-center">
             <Text className="text-[#0A0A0B] text-[12px] font-normal">Already have an account? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('sign-in')}>
+            <TouchableOpacity onPress={() => navigation.navigate('email-verify')}>
               <Text className="text-[#1D4F95] text-[12px] font-semibold">Login here</Text>
             </TouchableOpacity>
           </View>
@@ -209,10 +222,7 @@ const SignUp = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
-
   },
-
   title: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -267,3 +277,5 @@ const styles = StyleSheet.create({
 });
 
 export default SignUp;
+
+
