@@ -59,6 +59,8 @@ const SignUp = () => {
             email: values.email,
             verificationCode: response.data.data.user.email_verification_code,
             userId: response.data.data.user_id,
+            phoneVerificationCode: response.data.data.phone_verification_code,
+            phone: values.phone,
           });
           resetForm();
         } else {

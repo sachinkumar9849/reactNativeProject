@@ -3,6 +3,7 @@ import Login from "@/assets/images/login.png";
 import Arrow from "@/assets/images/arrow.png";
 import LoginVerify from "@/assets/images/loginVerify.png";
 import verifiedEmail from "@/assets/images/verifiedEmail.png";
+import phoneVerify from "@/assets/images/phoneVerify.png";
 
 
-export default {startImg ,Login,Arrow,LoginVerify,verifiedEmail};
+export default {startImg ,Login,Arrow,LoginVerify,verifiedEmail,phoneVerify};

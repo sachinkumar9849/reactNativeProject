@@ -70,42 +70,39 @@ const VerificationCodeInput = ({ onCodeComplete }) => {
 const EmailVerify = () => {
   const navigation = useNavigation();
   const params = useLocalSearchParams();
-  const [verificationCode, setVerificationCode] = useState('');
-  const [email, setEmail] = useState('');
+  const [phoneVerificationCode, setPhoneVerificationCode] = useState('');
+  const [phone, setPhone] = useState('');
   const [userId, setUserId] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [phone, setPhone] = useState('');
-  const [phoneVerificationCode, setPhoneVerificationCode] = useState('');
 
+
+
+
+  phone:phone
   useEffect(() => {
-    if (params?.email) {
-      setEmail(params.email);
+    if (params?.phone) {
+      setPhone(params.phone);
     }
     if (params?.userId) {
       setUserId(params.userId);
     }
-    if (params?.verificationCode) {
-      setVerificationCode(params.verificationCode);
-    }
     if (params?.phoneVerificationCode) {
       setPhoneVerificationCode(params.phoneVerificationCode);
-    }
-    if (params?.phone) {
-      setPhone(params.phone);
     }
   }, [params]);
 
   const handleCodeComplete = (code) => {
-    setVerificationCode(code);
+    setPhoneVerificationCode(code);
   };
 
   const handleVerification = async () => {
     try {
       const response = await axios.post(
-        'https://jobklik-develop.mantraideas.com.np/api/v1/candidate/verify-email',
+
+        'https://jobklik-develop.mantraideas.com.np/api/v1/candidate/verify-phone',
         {
           user_id: userId,
-          email_code: verificationCode
+          phone_verification_code: phoneVerificationCode
         }
       );
 
@@ -120,16 +117,11 @@ const EmailVerify = () => {
     }
   };
 
-
-
   const handleModalClose = () => {
     setModalVisible(false);
-    navigation.navigate('phone-verify', {
-      userId: userId,
-      phoneVerificationCode:phoneVerificationCode,
-      phone:phone,
-    });
+    navigation.navigate('sign-in');
   };
+  console.log("user id ", userId);
 
   const handleResendCode = () => {
     // Implement resend code logic here
@@ -147,10 +139,10 @@ const EmailVerify = () => {
         <View style={styles.modalContainer}>
           <View className='text-center' style={styles.modalContent}>
             <Text className='text-[16px] text-center font-semibold leading-5 text-[#151B25]'>
-              Your email is verified! Now, verify your phone to continue and unlock all features
+            Congrats! You’re now registered with Jobbicus! 🎉 Start exploring exciting opportunities today!
             </Text>
             <View className='my-8'>
-              <Image source={images.verifiedEmail} resizeMode="cover" />
+              <Image source={images.phoneVerify} resizeMode="cover" />
             </View>
             <TouchableOpacity
               style={styles.modalButton}
@@ -170,24 +162,22 @@ const EmailVerify = () => {
         Enter the 5 digit code we sent to
       </Text>
       <Text className='text-[18px] text-[#40454D] mb-5 font-semibold'>
-        {email}
+        {phone}
       </Text>
       <Text className='text-[18px] text-[#40454D] mb-5 font-semibold'>
-        {verificationCode}
+        {phoneVerificationCode}
       </Text>
-      <Text>{phoneVerificationCode}</Text>
-      <Text>{phone}</Text>
 
       <VerificationCodeInput onCodeComplete={handleCodeComplete} />
 
       <TouchableOpacity
         style={[
           styles.button,
-          !verificationCode && styles.buttonDisabled
+          !phoneVerificationCode && styles.buttonDisabled
         ]}
         className='mt-5'
         onPress={handleVerification}
-        disabled={!verificationCode}
+        disabled={!phoneVerificationCode}
       >
         <Text style={styles.buttonText}>Verify</Text>
       </TouchableOpacity>
