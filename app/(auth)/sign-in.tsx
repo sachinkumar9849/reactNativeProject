@@ -14,24 +14,13 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 
 const SignIn = () => {
   const navigation = useNavigation();
   // Form validation schema
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email').required('Email is required'),
-    password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required'),
-    first_name: Yup.string().required('First name is required'),
-    last_name: Yup.string().required('Last name is required'),
-    country_id: Yup.number().required('Country ID is required'),
-    phone: Yup.string()
-      .matches(/^\d+$/, 'Phone must be a number')
-      .min(10, 'Phone must be at least 10 digits')
-      .required('Phone is required'),
-    is_agreement: Yup.boolean().oneOf([true], 'You must agree to the terms'),
+
   });
 
   // Formik setup
@@ -39,21 +28,18 @@ const SignIn = () => {
     initialValues: {
       email: '',
       password: '',
-      first_name: '',
-      last_name: '',
-      country_id: '',
-      phone: '',
       is_agreement: false,
     },
     validationSchema,
     onSubmit: async (values, { resetForm, setErrors }) => {
       try {
         const response = await axios.post(
-          'https://jobklik-develop.mantraideas.com.np/api/v1/candidate/register',
+          'https://jobklik-develop.mantraideas.com.np/api/v1/auth/sign-in',
           values
         );
         Alert.alert('Success', response.data.message);
         resetForm();
+        router.push('/home');
       } catch (error) {
         if (error.response?.status === 422 && error.response.data?.errors) {
 
@@ -84,25 +70,25 @@ const SignIn = () => {
           />
 
           <View className='absolute bottom-12 left-5'>
-          <TouchableOpacity onPress={() => navigation.navigate('sign-up')}>
-          <Image
-              source={images.Arrow}
-              resizeMode="cover"
-              className="mb-7"
-            />
+            <TouchableOpacity onPress={() => navigation.navigate('sign-up')}>
+              <Image
+                source={images.Arrow}
+                resizeMode="cover"
+                className="mb-7"
+              />
             </TouchableOpacity>
-         
+
             <Text className='text-[32px] font-semibold text-[#EEEEEE] mb-3'>Sign in to your Account</Text>
             <View className='flex items-center flex-row'>
               <Text className='text-[14px] font-normal text-[#EEEEEE]'>Don’t have an account?</Text>
-              <TouchableOpacity onPress={()=>navigation.navigate("sign-in")}>
-              <Text className="text-[#F3C074] text-[14px] font-semibold ml-1">Sign Up</Text>
+              <TouchableOpacity onPress={() => navigation.navigate("sign-in")}>
+                <Text className="text-[#F3C074] text-[14px] font-semibold ml-1">Sign Up</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
         <View className='p-5'>
-         
+
           <TextInput
             style={styles.input}
             placeholder="Email"
@@ -125,18 +111,28 @@ const SignIn = () => {
           {formik.touched.password && formik.errors.password && (
             <Text style={styles.error}>{formik.errors.password}</Text>
           )}
-
-
-
-     
-          {formik.touched.country_id && formik.errors.country_id && (
-            <Text style={styles.error}>{formik.errors.country_id}</Text>
+          <View style={styles.checkboxContainer}>
+            <TouchableOpacity
+              style={styles.checkbox}
+              onPress={() => formik.setFieldValue('is_agreement', !formik.values.is_agreement)}
+            >
+              <View
+                style={[
+                  styles.checkboxInner,
+                  formik.values.is_agreement && styles.checkboxChecked,
+                ]}
+              />
+            </TouchableOpacity>
+            <Text style={styles.checkboxLabel} className='text-[#6C7278]'>Remember me</Text>
+          </View>
+          {formik.touched.is_agreement && formik.errors.is_agreement && (
+            <Text style={styles.error}>{formik.errors.is_agreement}</Text>
           )}
 
-        
+
 
           <TouchableOpacity style={styles.button} className='mt-5' onPress={formik.handleSubmit}>
-            <Text style={styles.buttonText}>Register</Text>
+            <Text style={styles.buttonText}>Sign In</Text>
           </TouchableOpacity>
           <View className="mt-4 flex-row justify-center">
             <Text className="text-[#0A0A0B] text-[14px] font-normal">Don’t have an account? </Text>
