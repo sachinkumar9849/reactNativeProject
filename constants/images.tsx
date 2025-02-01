@@ -17,4 +17,8 @@ import planning2 from "@/assets/images/tab/planning2.png";
 import planning3 from "@/assets/images/tab/planning3.png";
 import home from "@/assets/images/tab/home.png";
 import message from "@/assets/images/tab/message.png";
-export default {message,home,planning3,planning2,planning1,quiz,users,startImg ,Login,Arrow,LoginVerify,verifiedEmail,phoneVerify,banner,user,notice,logoSmall,completeProfile,search};
+import arrowBlack from "@/assets/images/arrowBlack.png";
+import skills1 from "@/assets/images/skills1.png";
+import add from "@/assets/images/add.png";
+
+export default {add,skills1,arrowBlack,message,home,planning3,planning2,planning1,quiz,users,startImg ,Login,Arrow,LoginVerify,verifiedEmail,phoneVerify,banner,user,notice,logoSmall,completeProfile,search};

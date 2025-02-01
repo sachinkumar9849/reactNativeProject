@@ -12,8 +12,16 @@ const screenWidth = Dimensions.get('window').width;
 import { images } from '@/constants'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Title from '@/components/comman/Title';
+import { router } from "expo-router";
+
+
 
 const Home = () => {
+
+
+  const handleResendCode = ()=>{
+    router.push("/skills-select")
+  }
   return (
     <SafeAreaView>
       <View className='flex-3'>
@@ -38,6 +46,7 @@ const Home = () => {
             <View>
 
               <TouchableOpacity
+              onPress={handleResendCode}
                 style={[
                   styles.button,
 

@@ -7,7 +7,7 @@ export default function RootLayout() {
   const [fontsLoaded, error] = useFonts({
     "source-sans-pro-semibold": require("../assets/fonts/source-sans-pro-semibold.ttf"),
 
-    
+
   });
   useEffect(() => {
     if (error) throw error;
@@ -25,18 +25,19 @@ export default function RootLayout() {
     return null;
   }
   return (
-    
+
     <Stack>
-   <Stack.Screen
+      <Stack.Screen
         name="index"
         options={{
           headerShown: false,
         }}
       />
-      <Stack.Screen name="(auth)" options={{headerShown:false}}/>
-      <Stack.Screen name="(tabs)" options={{headerShown:false}}/>
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(candidateProfile)" options={{ headerShown: false }}/>
       <Toast />
     </Stack>
-     
+
   )
 }
