@@ -19,12 +19,12 @@ import { router, useNavigation } from 'expo-router';
 
 const SignIn = () => {
   const navigation = useNavigation();
-  // Form validation schema
+
   const validationSchema = Yup.object().shape({
 
   });
 
-  // Formik setup
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -62,7 +62,7 @@ const SignIn = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-  <StatusBar  backgroundColor="#112D55" />
+        <StatusBar backgroundColor="#112D55" />
         <View className='relative'>
           <Image
             source={images.Login}

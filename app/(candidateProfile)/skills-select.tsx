@@ -6,11 +6,13 @@ import SkillTitle from '@/components/comman/SkillTitle'
 import { ActivityIndicator } from 'react-native'
 import { GET_SKILLS } from '../apollo/queries'
 import { useQuery } from '@apollo/client'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 interface Skill {
     id: string
     name: string
 }
+
 interface SkillsData {
     skills: Skill[]
 }
@@ -38,85 +40,92 @@ const Skills = () => {
     }
 
     return (
-        <ScrollView className='bg-white px-7 pt-10'>
-            <View>
-                <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
-                <View className="flex flex-row items-center">
-                    <Image source={images.arrowBlack} width={33} height={33} />
-                    <Text className='text-[#262626] font-bold ml-5 text-[18px]'>Setup your profile</Text>
-                </View>
+        <SafeAreaView className='flex-1'>
+            <ScrollView className='bg-white px-7 pt-10'>
+                <View>
+                    <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
+                    <View className="flex flex-row items-center">
+                        <Image source={images.arrowBlack} width={33} height={33} />
+                        <Text className='text-[#262626] font-bold ml-5 text-[18px]'>Setup your profile</Text>
+                    </View>
 
-                <View className='flex justify-center w-full items-center mt-10'>
-                    <Image source={images.skills1} />
-                </View>
+                    <View className='flex justify-center w-full items-center mt-10'>
+                        <Image source={images.skills1} />
+                    </View>
 
-                <View className='mt-7'>
-                    <SkillTitle titleSkill="Select your skills below to showcase what you can do." />
-                    <Text className='text-[#0A0A0B] text-[12] font-normal mt-4'>
-                        Choose the skills that best define your strengths and expertise. Help employers quickly understand what makes you the right fit for their team.
-                    </Text>
-                </View>
+                    <View className='mt-7'>
+                        <SkillTitle titleSkill="Select your skills below to showcase what you can do." />
+                        <Text className='text-[#0A0A0B] text-[12] font-normal mt-4'>
+                            Choose the skills that best define your strengths and expertise. Help employers quickly understand what makes you the right fit for their team.
+                        </Text>
+                    </View>
 
-                <View className='my-6'>
-                    <TextInput
-                        className='rounded-md'
-                        style={styles.textInput}
-                        placeholder={'Skills'}
-                        value={searchTerm}
-                        onChangeText={setSearchTerm}
-                    />
-                </View>
+                    <View className='my-6'>
+                        <TextInput
+                            className='rounded-md'
+                            style={styles.textInput}
+                            placeholder={'Skills'}
+                            value={searchTerm}
+                            onChangeText={setSearchTerm}
+                        />
+                    </View>
 
 
-                {selectedSkills.length > 0 && (
+                    {selectedSkills.length > 0 && (
+                        <View>
+                            <Text className='text-[#0A0A0B] text-[12px] font-semibold'>Selected Skills</Text>
+                            <View className='flex flex-row flex-wrap gap-2 mt-0'>
+                                {selectedSkills.map(skill => (
+                                    <TouchableOpacity
+                                        key={skill.id}
+                                        style={styles.textInput}
+                                        className='mt-5 flex flex-row items-center p-2 rounded-md'
+                                        onPress={() => toggleSkill(skill)}
+                                    >
+
+                                        <Text>{skill.name}</Text>
+                                        <Image className='ml-2' source={images.close} />
+
+                                    </TouchableOpacity>
+                                ))}
+                            </View>
+                        </View>
+                    )}
+
                     <View>
-                        <Text className='text-[#0A0A0B] text-[12px] font-semibold'>Selected Skills</Text>
-                        <View className='flex flex-row flex-wrap gap-2 mt-0'>
-                            {selectedSkills.map(skill => (
+                        <Text className='text-[#0A0A0B] text-[12px] font-semibold my-3'>Suggested Skills</Text>
+                    </View>
+
+                    {loading ? (
+                        <ActivityIndicator size="large" className='mt-5' />
+                    ) : error ? (
+                        <Text className='mt-5 text-red-500'>Error loading skills</Text>
+                    ) : (
+                        <View className='flex flex-row flex-wrap gap-2'>
+                            {filteredSkills.map(skill => (
                                 <TouchableOpacity
                                     key={skill.id}
-                                    style={styles.textInput}
+                                    style={[
+                                        styles.textInput,
+                                        selectedSkills.some(s => s.id === skill.id) && styles.selectedSkill
+                                    ]}
                                     className='mt-5 flex flex-row items-center p-2 rounded-md'
                                     onPress={() => toggleSkill(skill)}
                                 >
-
+                                    <Image source={images.add} className='mr-2' />
                                     <Text>{skill.name}</Text>
-                                    <Image className='ml-2' source={images.close} />
-
                                 </TouchableOpacity>
                             ))}
                         </View>
-                    </View>
-                )}
-
-                <View>
-                    <Text className='text-[#0A0A0B] text-[12px] font-semibold my-3'>Suggested Skills</Text>
+                    )}
                 </View>
-
-                {loading ? (
-                    <ActivityIndicator size="large" className='mt-5' />
-                ) : error ? (
-                    <Text className='mt-5 text-red-500'>Error loading skills</Text>
-                ) : (
-                    <View className='flex flex-row flex-wrap gap-2'>
-                        {filteredSkills.map(skill => (
-                            <TouchableOpacity
-                                key={skill.id}
-                                style={[
-                                    styles.textInput,
-                                    selectedSkills.some(s => s.id === skill.id) && styles.selectedSkill
-                                ]}
-                                className='mt-5 flex flex-row items-center p-2 rounded-md'
-                                onPress={() => toggleSkill(skill)}
-                            >
-                                <Image source={images.add} className='mr-2' />
-                                <Text>{skill.name}</Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-                )}
+            </ScrollView>
+            <View className='py-3' style={styles.nextButtonContainer}>
+                <TouchableOpacity style={styles.nextButton} onPress={() => console.log("Next button pressed")}>
+                    <Text style={styles.nextButtonText}>Next</Text>
+                </TouchableOpacity>
             </View>
-        </ScrollView>
+        </SafeAreaView>
     )
 }
 
@@ -138,6 +147,36 @@ const styles = StyleSheet.create({
         borderWidth: 1,
 
         backgroundColor: 'gray',
+    },
+    nextButtonContainer: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+
+        backgroundColor: "white",
+        borderTopColor: "#1D4F95",
+        borderTopWidth: 1,
+        width: "100%",
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems: "flex-end",
+        paddingRight: 11,
+
+
+    },
+    nextButton: {
+        backgroundColor: '#1D4F95',
+        paddingVertical: 14,
+        paddingHorizontal: 30, 
+        borderRadius: 10,
+
+
+    },
+    nextButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
 
