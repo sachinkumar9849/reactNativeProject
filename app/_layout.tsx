@@ -2,6 +2,7 @@ import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import Toast from 'react-native-toast-message';
+import { ApolloWrapper } from "./apollo/client";
 
 export default function RootLayout() {
   const [fontsLoaded, error] = useFonts({
@@ -25,8 +26,8 @@ export default function RootLayout() {
     return null;
   }
   return (
-
-    <Stack>
+    <ApolloWrapper>
+   <Stack>
       <Stack.Screen
         name="index"
         options={{
@@ -38,6 +39,9 @@ export default function RootLayout() {
       <Stack.Screen name="(candidateProfile)" options={{ headerShown: false }}/>
       <Toast />
     </Stack>
+    </ApolloWrapper>
+
+ 
 
   )
 }

@@ -20,5 +20,6 @@ import message from "@/assets/images/tab/message.png";
 import arrowBlack from "@/assets/images/arrowBlack.png";
 import skills1 from "@/assets/images/skills1.png";
 import add from "@/assets/images/add.png";
+import close from "@/assets/images/close.png";close.png
 
-export default {add,skills1,arrowBlack,message,home,planning3,planning2,planning1,quiz,users,startImg ,Login,Arrow,LoginVerify,verifiedEmail,phoneVerify,banner,user,notice,logoSmall,completeProfile,search};
+export default {close,add,skills1,arrowBlack,message,home,planning3,planning2,planning1,quiz,users,startImg ,Login,Arrow,LoginVerify,verifiedEmail,phoneVerify,banner,user,notice,logoSmall,completeProfile,search};
