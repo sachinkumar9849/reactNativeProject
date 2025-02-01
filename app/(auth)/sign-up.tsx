@@ -9,6 +9,7 @@ import {
   Alert,
   StyleSheet,
   Image,
+  StatusBar,
 } from 'react-native';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -90,7 +91,7 @@ const SignUp = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-
+<StatusBar  backgroundColor="#112D55" />
         <View className='relative'>
           <Image
             source={images.Login}

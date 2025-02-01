@@ -7,7 +7,9 @@ import {
   StyleSheet,
   TextInput,
   Alert,
-  Modal
+  Modal,
+  StatusBar,
+  ScrollView
 } from 'react-native';
 import { images } from '@/constants';
 import axios from 'axios';
@@ -137,6 +139,8 @@ const EmailVerify = () => {
   };
 
   return (
+    <ScrollView>
+      <StatusBar  backgroundColor="#112D55" />
     <View style={styles.container} className='bg-white p-5'>
       <Modal
         animationType="slide"
@@ -202,7 +206,8 @@ const EmailVerify = () => {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </View> 
+    </ScrollView>
   );
 };
 

@@ -4,6 +4,17 @@ import Arrow from "@/assets/images/arrow.png";
 import LoginVerify from "@/assets/images/loginVerify.png";
 import verifiedEmail from "@/assets/images/verifiedEmail.png";
 import phoneVerify from "@/assets/images/phoneVerify.png";
-
-
-export default {startImg ,Login,Arrow,LoginVerify,verifiedEmail,phoneVerify};
+import banner from "@/assets/images/tab/banner.png";
+import user from "@/assets/images/tab/user.png";
+import notice from "@/assets/images/tab/notice.png";
+import logoSmall from "@/assets/images/tab/logoSmall.png";
+import completeProfile from "@/assets/images/tab/completeProfile.png";
+import search from "@/assets/images/tab/search.png";
+import users from "@/assets/images/users.png";
+import quiz from "@/assets/images/tab/quiz.png";
+import planning1 from "@/assets/images/tab/planning1.png";
+import planning2 from "@/assets/images/tab/planning2.png";
+import planning3 from "@/assets/images/tab/planning3.png";
+import home from "@/assets/images/tab/home.png";
+import message from "@/assets/images/tab/message.png";
+export default {message,home,planning3,planning2,planning1,quiz,users,startImg ,Login,Arrow,LoginVerify,verifiedEmail,phoneVerify,banner,user,notice,logoSmall,completeProfile,search};
