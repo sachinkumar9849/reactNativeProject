@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { images } from "@/constants";
 import {
   View,
@@ -16,13 +16,36 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useNavigation } from 'expo-router';
+import { useAuth } from '../hooks/useAuth';
 
 const SignIn = () => {
   const navigation = useNavigation();
+  const { signIn , isAuthenticated, isLoading } = useAuth();
+
+  useEffect(()=>{
+    if(isAuthenticated && !isLoading){
+      router.replace("/home");
+    }
+  },[isAuthenticated, isLoading])
 
   const validationSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email').required('Email is required'),
+    password: Yup.string().required('Password is required'),
 
   });
+    // If still loading auth state, you might want to show a loading indicator
+    if (isLoading) {
+      return (
+        <View>
+          <Text>Loading...</Text>
+        </View>
+      );
+    }
+  
+    // If already authenticated, don't render the form at all
+    if (isAuthenticated) {
+      return null;
+    }
 
 
   const formik = useFormik({
@@ -38,25 +61,17 @@ const SignIn = () => {
           'https://jobklik-develop.mantraideas.com.np/api/v1/auth/sign-in',
           values
         );
-        Alert.alert('Success', response.data.message);
-        resetForm();
-        router.push('/home');
-      } catch (error) {
-        if (error.response?.status === 422 && error.response.data?.errors) {
 
-          setErrors({
-            email: error.response.data.errors.email?.[0],
-            phone: error.response.data.errors.phone?.[0],
-          });
-        } else {
-          Alert.alert(
-            'Error',
-            error.response?.data?.message || 'Registration failed. Please try again.'
-          );
+        if(response.data.success){
+          await signIn(response.data.data);
+          Alert.alert("Success", response.data.message);
+          resetForm();
+          router.replace('/home');
         }
+      } catch (error) {
+        console.log(error)
       }
     },
-
   });
 
   return (
