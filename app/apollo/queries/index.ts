@@ -8,3 +8,12 @@ export const GET_SKILLS = gql`
     }
   }
 `
+export const ADD_ROLE = gql`
+  mutation AddRole($input: AddRoleInput!) {
+    addRole(input: $input) {
+      success
+      message
+      role
+    }
+  }
+`

@@ -1,28 +1,48 @@
-import { View, Text, StatusBar, ScrollView, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StatusBar, ScrollView, Image, TextInput, Alert, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { images } from '@/constants'
 import SkillTitle from '@/components/comman/SkillTitle'
-
 import { ActivityIndicator } from 'react-native'
 import { GET_SKILLS } from '../apollo/queries'
-import { useQuery } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { router } from 'expo-router'
 
-interface Skill {
-    id: string
-    name: string
-}
+
 
 interface SkillsData {
     skills: Skill[]
 }
 
+const ADD_SKILLS = gql`
+  mutation AddSkills($input: AddSkillsInput!) {
+    addSkills(input: $input) {
+      success
+      message
+    }
+  }
+`
+
+interface Skill {
+    id: string
+    name: string
+}
+interface SkillsData {
+    skills: Skill[]
+}
+
+interface AddSkillsResponse {
+    addSkills: {
+        success: boolean
+        message: string
+    }
+}
+
 const Skills = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const [selectedSkills, setSelectedSkills] = useState<Skill[]>([])
-
-
     const { loading, error, data } = useQuery<SkillsData>(GET_SKILLS)
+    const [addSkills, { loading: addingSkills }] = useMutation<AddSkillsResponse>(ADD_SKILLS)
 
 
     const filteredSkills = data?.skills.filter(skill =>
@@ -37,6 +57,38 @@ const Skills = () => {
         } else {
             setSelectedSkills([...selectedSkills, skill])
         }
+    }
+
+    const handleClicked = async () => {
+        if (selectedSkills.length === 0) {
+            Alert.alert('Error', 'Please select at least one skill')
+            return
+        }
+        try {
+            const response = await addSkills({
+                variables: {
+                    input: {
+                        candidate_id: "98",
+                        skills: selectedSkills.map(skill => skill.name).join(",")
+                    }
+                }
+            })
+            if (response.data?.addSkills.success) {
+                Alert.alert('Success', response.data.addSkills.message, [
+                    {
+                        text: 'OK',
+                        onPress: () => router.push("/add-role")
+                    }
+                ])
+            } else {
+                Alert.alert('Error', 'Failed to add skills')
+            }
+        } catch (error) {
+            Alert.alert('Error', 'Something went wrong while adding skills')
+        }
+
+
+        router.push("/add-role")
     }
 
     return (
@@ -121,8 +173,19 @@ const Skills = () => {
                 </View>
             </ScrollView>
             <View className='py-3' style={styles.nextButtonContainer}>
-                <TouchableOpacity style={styles.nextButton} onPress={() => console.log("Next button pressed")}>
-                    <Text style={styles.nextButtonText}>Next</Text>
+                <TouchableOpacity
+                    style={[
+                        styles.nextButton,
+                        addingSkills && { opacity: 0.7 }
+                    ]}
+                    onPress={handleClicked}
+                    disabled={addingSkills}
+                >
+                    {addingSkills ? (
+                        <ActivityIndicator color="white" />
+                    ) : (
+                        <Text style={styles.nextButtonText}>Next</Text>
+                    )}
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -168,7 +231,7 @@ const styles = StyleSheet.create({
     nextButton: {
         backgroundColor: '#1D4F95',
         paddingVertical: 14,
-        paddingHorizontal: 30, 
+        paddingHorizontal: 30,
         borderRadius: 10,
 
 
