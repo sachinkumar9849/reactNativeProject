@@ -22,5 +22,7 @@ import skills1 from "@/assets/images/skills1.png";
 import add from "@/assets/images/add.png";
 import close from "@/assets/images/close.png";
 import role from "@/assets/images/role.png";
+import addExperience from "@/assets/images/tab/addExperience.png";
+import addArrow from "@/assets/images/tab/addArrow.png";
 
-export default {role,close,add,skills1,arrowBlack,message,home,planning3,planning2,planning1,quiz,users,startImg ,Login,Arrow,LoginVerify,verifiedEmail,phoneVerify,banner,user,notice,logoSmall,completeProfile,search};
+export default {addArrow,addExperience,role,close,add,skills1,arrowBlack,message,home,planning3,planning2,planning1,quiz,users,startImg ,Login,Arrow,LoginVerify,verifiedEmail,phoneVerify,banner,user,notice,logoSmall,completeProfile,search};

@@ -18,7 +18,7 @@ const FormField = ({
 
       <View className="border border-[#6C7278] rounded-md h-[40px]">
         <TextInput
-          className="flex-1 text-white font-psemibold text-base"
+          className="pl-2 flex-1 text-white font-psemibold text-base"
           value={value}
           placeholder={placeholder}
           placeholderTextColor="#00000099"

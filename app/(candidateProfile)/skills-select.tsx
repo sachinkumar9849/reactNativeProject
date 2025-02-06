@@ -1,5 +1,5 @@
 import { View, Text, StatusBar, ScrollView, Image, TextInput, Alert, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { images } from '@/constants'
 import SkillTitle from '@/components/comman/SkillTitle'
 import { ActivityIndicator } from 'react-native'
@@ -7,7 +7,8 @@ import { GET_SKILLS } from '../apollo/queries'
 import { gql, useMutation, useQuery } from '@apollo/client'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
-
+import { useAuth } from '../hooks/useAuth'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 interface SkillsData {
@@ -39,10 +40,39 @@ interface AddSkillsResponse {
 }
 
 const Skills = () => {
+    const { isAuthenticated, isLoading } = useAuth();
     const [searchTerm, setSearchTerm] = useState('')
     const [selectedSkills, setSelectedSkills] = useState<Skill[]>([])
     const { loading, error, data } = useQuery<SkillsData>(GET_SKILLS)
     const [addSkills, { loading: addingSkills }] = useMutation<AddSkillsResponse>(ADD_SKILLS)
+
+    useEffect(() => {
+        const checkAuthStatus = async () => {
+            try {
+                const userData = await AsyncStorage.getItem("userData");
+                const parsedUserData = userData ? JSON.parse(userData) : null;
+
+                console.log("Authentication Status:", isAuthenticated);
+                console.log("Loading Status:", isLoading);
+                console.log("User Data:", parsedUserData);
+
+                if (!isLoading && !isAuthenticated) {
+                    router.replace('/login')
+                }
+            } catch (error) {
+                console.log("Error checking auth status:", error);
+            }
+        };
+
+        checkAuthStatus();
+    }, [isAuthenticated, isLoading]);
+    if (isLoading) {
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator size="large" color="#1D4F95" />
+            </View>
+        )
+    }
 
 
     const filteredSkills = data?.skills.filter(skill =>
@@ -65,10 +95,14 @@ const Skills = () => {
             return
         }
         try {
+            const userData = await AsyncStorage.getItem("userData");
+            const parsedUserData = userData ? JSON.parse(userData) : null;
+            console.log("Current User Data:", parsedUserData);
+            console.log("Selected Skills:", selectedSkills);
             const response = await addSkills({
                 variables: {
                     input: {
-                        candidate_id: "98",
+                        candidate_id: parsedUserData.id.toString(),
                         skills: selectedSkills.map(skill => skill.name).join(",")
                     }
                 }
@@ -77,7 +111,10 @@ const Skills = () => {
                 Alert.alert('Success', response.data.addSkills.message, [
                     {
                         text: 'OK',
-                        onPress: () => router.push("/add-role")
+                        onPress:()=>{
+                        setSelectedSkills([]);
+                        router.push("/add-role")
+                       }
                     }
                 ])
             } else {

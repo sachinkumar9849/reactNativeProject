@@ -1,52 +1,18 @@
 import { View, Text, StatusBar, ScrollView, Image, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { router } from 'expo-router'
 import { images } from '@/constants'
 import SkillTitle from '@/components/comman/SkillTitle'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { useMutation } from '@apollo/client'
-import { ADD_ROLE } from '../apollo/queries'
-import { router } from 'expo-router'
-
-interface AddRoleInput {
-    role: string
-    
-}
-
-interface AddRoleResponse {
-    addRole: {
-        success: boolean
-        message: string
-        role: string
-    }
-}
+import CustomButton from '@/components/comman/CustomButton'
 
 const AddRole = () => {
-    const [role, setRole] = useState("");
-    const [addRole, { loading }] = useMutation<AddRoleResponse, AddRoleInput>(ADD_ROLE);
-
-    const handleSubmit = async () => {
-        if (!role.trim()) {
-            Alert.alert("Error", "Please enter a professional role");
-            return;
-        }
-
-        try {
-            const response = await addRole({
-                variables: { 
-                    input: { role }  // Wrap role in input object
-                }
-            });
-
-            if (response.data?.addRole.success) {
-                router.push("/add-experience"); 
-            } else {
-                Alert.alert("Error", response.data?.addRole.message || "Something went wrong");
-            }
-        } catch (error) {
-            Alert.alert("Error", "Failed to submit role");
-            console.error(error);
-        }
-    };
+    const handlePress = () => {
+        router.push("/add-experience-form")
+    }
+    const AddExperience =()=>{
+        router.push("/add-experience-form")
+    }
 
     return (
         <SafeAreaView className='flex-1'>
@@ -57,37 +23,27 @@ const AddRole = () => {
                         <Image source={images.arrowBlack} width={33} height={33} />
                         <Text className='text-[#262626] font-bold ml-5 text-[18px]'>Setup your profile</Text>
                     </View>
-
                     <View className='flex justify-center w-full items-center mt-10'>
-                        <Image source={images.role} />
+                        <Image source={images.addExperience} />
                     </View>
-
                     <View className='mt-7'>
-                        <SkillTitle titleSkill="Define Your Role!" />
+                        <SkillTitle titleSkill="Highlight Your Journey!" />
                         <Text className='text-[#0A0A0B] text-[12] font-normal mt-4'>
-                            Choose the job title that best describes your expertise to help employers find the right match.
+                            Add your work experience to showcase your career path and achievements to potential employers.
                         </Text>
                     </View>
-                    <View className='mt-7'>
-                        <TextInput
-                            className='rounded-md'
-                            style={styles.textInput}
-                            placeholder={'Your Professional role'}
-                            value={role}
-                            onChangeText={setRole}
-                        />
-                        <Text className='text-[#00000099] text-[12px] pl-2 pt-1'>Example: Warehouse Worker</Text>
+                    <View className='w-3/6 mt-6'>
+                        <CustomButton onPress={AddExperience} title="Add Experience"/>
                     </View>
                 </View>
             </ScrollView>
             <View className='py-3' style={styles.nextButtonContainer}>
-                <TouchableOpacity 
-                    style={styles.nextButton} 
-                    onPress={handleSubmit}
-                    disabled={loading}
+                <TouchableOpacity
+                    style={styles.nextButton}
+                    onPress={handlePress}
                 >
                     <Text style={styles.nextButtonText}>
-                        {loading ? 'Submitting...' : 'Submit'}
+                        Next
                     </Text>
                 </TouchableOpacity>
             </View>
