@@ -1,106 +1,47 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
-
-const data = [
-  { label: 'Item 1', value: '1' },
-  { label: 'Item 2', value: '2' },
-  { label: 'Item 3', value: '3' },
-  { label: 'Item 4', value: '4' },
-  { label: 'Item 5', value: '5' },
-  { label: 'Item 6', value: '6' },
-  { label: 'Item 7', value: '7' },
-  { label: 'Item 8', value: '8' },
-];
+import { gql, useQuery } from '@apollo/client';
+import { GET_CANDIDATE_LOCATIONS } from '@/app/apollo/queries';
 
 const DropdownComponent = () => {
   const [value, setValue] = useState(null);
+  const { loading, error, data } = useQuery(GET_CANDIDATE_LOCATIONS);
 
-  const renderItem = item => {
-    return (
-      <View style={styles.item}>
-        <Text style={styles.textItem}>{item.label}</Text>
-        {item.value === value && (
-          <AntDesign
-            style={styles.icon}
-            color="black"
-            name="Safety"
-            size={20}
-          />
-        )}
-      </View>
-    );
-  };
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error loading data</Text>;
+
+  // Map API response to dropdown format
+  const dropdownData = data.candidateLocations.map((location: any) => ({
+    label: location.nicename,
+    value: location.id,
+  }));
 
   return (
-    <Dropdown
-      style={styles.dropdown}
-      placeholderStyle={styles.placeholderStyle}
-      selectedTextStyle={styles.selectedTextStyle}
-      inputSearchStyle={styles.inputSearchStyle}
-      iconStyle={styles.iconStyle}
-      data={data}
-    
-      maxHeight={300}
-      labelField="label"
-      valueField="value"
-      placeholder="Select item"
-     
-      value={value}
-      onChange={item => {
-        setValue(item.value);
-      }}
-     
-      renderItem={renderItem}
-    />
+    <View style={styles.container}>
+      <Dropdown
+        style={styles.dropdown}
+        data={dropdownData}
+        labelField="label"
+        valueField="value"
+        placeholder="Select a country"
+        value={value}
+        onChange={(item) => setValue(item.value)}
+      />
+    </View>
   );
 };
 
 export default DropdownComponent;
 
 const styles = StyleSheet.create({
+
   dropdown: {
-  
     height: 50,
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 12,
-    // shadowColor: '#000',
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 1,
-    // },
-    // shadowOpacity: 0.2,
-    // shadowRadius: 1.41,
-
-    elevation: 1,
-  },
-  icon: {
-    marginRight: 5,
-  },
-  item: {
-    padding: 17,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  textItem: {
-    flex: 1,
-    fontSize: 16,
-  },
-  placeholderStyle: {
-    fontSize: 16,
-  },
-  selectedTextStyle: {
-    fontSize: 16,
-  },
-  iconStyle: {
-    width: 20,
-    height: 20,
-  },
-  inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
+    borderWidth: 1,
+    borderColor: '#bec5cf',
   },
 });

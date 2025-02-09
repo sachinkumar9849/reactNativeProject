@@ -17,3 +17,12 @@ export const ADD_ROLE = gql`
     }
   }
 `
+export const GET_CANDIDATE_LOCATIONS = gql`
+  query CandidateLocations {
+    candidateLocations {
+      id
+      nicename
+    }
+  }
+`;
+
