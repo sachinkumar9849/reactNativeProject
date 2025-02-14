@@ -10,6 +10,8 @@ import InputField from '@/components/comman/InputField'
 import DropdownComponent from '@/components/comman/CustomDropdown'
 import CustomCheckbox from '@/components/comman/CustomCheckbox'
 import Select from '@/components/comman/Select'
+import { useAuth } from '../hooks/useAuth'
+import DateSelector from '@/components/comman/DateSelector'
 
 // Define types
 interface AddExperienceInput {
@@ -19,8 +21,14 @@ interface AddExperienceInput {
   location: string
   country: string | number
   currently_working: boolean
-  start_date: string
-  end_date: string
+  start_date: {
+    month: string;
+    year: string;
+  };
+  end_date: {
+    month: string;
+    year: string;
+  };
   description: string
 }
 
@@ -30,12 +38,19 @@ const validationSchema = Yup.object().shape({
   company: Yup.string().required('Company is required'),
   location: Yup.string().required('Location is required'),
   country: Yup.string().required('Country is required'),
-  start_date: Yup.string().required('Start date is required'),
-  end_date: Yup.string().when('currently_working', {
+  start_date: Yup.object().shape({
+    month: Yup.string().required('Start month is required'),
+    year: Yup.string().required('Start year is required')
+  }),
+  end_date: Yup.object().when('currently_working', {
     is: false,
-    then: Yup.string().required('End date is required'),
+    then: Yup.object().shape({
+      month: Yup.string().required('End month is required'),
+      year: Yup.string().required('End year is required')
+    })
   }),
   description: Yup.string().required('Description is required'),
+
 })
 
 const ADD_EXPERIENCE = gql`
@@ -49,42 +64,82 @@ const ADD_EXPERIENCE = gql`
 
 const AddExperience = () => {
   const [addExperience, { loading, error, data }] = useMutation(ADD_EXPERIENCE)
+  const { isAuthenticated } = useAuth();
 
   console.log("GraphQL query :=>", ADD_EXPERIENCE.loc?.source.body)
 
   const formik = useFormik({
     initialValues: {
-      candidate_id: '98', // Hardcoded for example
+      candidate_id: "98", // Hardcoded for example
       title: '',
       company: '',
       location: '',
-      country: '1',
-      currently_working: true,
-      start_date: '2020',
-      end_date: '2024',
+      country: '',
+      currently_working: false,
+      start_date: {
+        month: '',
+        year: ''
+      },
+      end_date: {
+        month: '',
+        year: ''
+      },
       description: '',
     },
-   
-    validationSchema,
+
+    validationSchema: Yup.object().shape({
+      title: Yup.string().required('Title is required'),
+      company: Yup.string().required('Company is required'),
+      location: Yup.string().required('Location is required'),
+      country: Yup.string().required('Country is required'),
+      start_date: Yup.object().shape({
+        month: Yup.string().required('Start month is required'),
+        year: Yup.string().required('Start year is required')
+      }),
+      end_date: Yup.object().when('currently_working', {
+        is: false,
+        then: Yup.object().shape({
+          month: Yup.string().required('End month is required'),
+          year: Yup.string().required('End year is required')
+        })
+      }),
+      description: Yup.string().required('Description is required'),
+    }),
     onSubmit: async (values) => {
-     console.log("Form Submission started =======")
-     console.log("Form Values:", JSON.stringify(values, null,2))
+      console.log("Form Submission started =======")
+      console.log("Form Values:", JSON.stringify(values, null, 2))
+
+      if (!values.start_date.month || !values.start_date.year) {
+        console.error('Start date is required');
+        return;
+      }
+
+      if (!values.currently_working && (!values.end_date.month || !values.end_date.year)) {
+        console.error('End date is required when not currently working');
+        return;
+      }
+
+      const formattedValues = {
+        ...values,
+        start_date: `${values.start_date.month}-${values.start_date.year}`,
+        end_date: values.currently_working ? null : `${values.end_date.month}-${values.end_date.year}`
+      };
       try {
-        console.log("sending mutation with varibales:",{
+        console.log("sending mutation with varibales:", {
           input: values
         })
         const response = await addExperience({
           variables: {
-            input: values,
+            input: formattedValues,
           },
         })
 
-        console.log("Mutation Response:",JSON.stringify(response, null,2))
-        
+        console.log("Mutation Response:", JSON.stringify(response, null, 2))
+
         if (response.data?.addExperience.success) {
           // Handle success - maybe show a toast or navigate away
-          console.log('Experience added successfully!',response.data.addExperience.message)
-        }else{
+          console.log('Experience added successfully!', response.data.addExperience.message)
+        } else {
           console.warn("Mutation returned success: false", response.data?.addExperience)
         }
       } catch (error) {
@@ -99,15 +154,15 @@ const AddExperience = () => {
     },
   })
 
-  useEffect(()=>{
-    console.log("Form State Updated:",{
+  useEffect(() => {
+    console.log("Form State Updated:", {
       values: formik.values,
       errors: formik.errors,
       touched: formik.touched,
       isValid: formik.isValid,
       isSubmitting: formik.isSubmitting
     })
-  },[formik.values,formik.errors, formik.touched ])
+  }, [formik.values, formik.errors, formik.touched])
 
   const formatDate = (month: string, year: string) => {
     return `${month}-${year}`
@@ -130,14 +185,14 @@ const AddExperience = () => {
     )
   }
 
-  const handleSubmit= ()=>{
+  const handleSubmit = () => {
     console.log("Submit button pressed");
     console.log('Current form state:', {
       values: formik.values,
       errors: formik.errors,
       isValid: formik.isValid
     })
-    if(!formik.isValid){
+    if (!formik.isValid) {
       console.warn("Form validation failed:", formik.errors)
       return
     }
@@ -152,7 +207,7 @@ const AddExperience = () => {
           <Image source={images.arrowBlack} width={33} height={33} />
           <Text className='text-[#262626] font-bold ml-5 text-[18px]'>Setup your profile</Text>
         </View>
-        
+
         <View className='mt-7'>
           <SkillTitle titleSkill="Highlight Your Journey!" />
           <Text className='text-[#0A0A0B] text-[12] font-normal mt-4'>
@@ -161,12 +216,12 @@ const AddExperience = () => {
         </View>
 
         <View className='mt-8'>
-        {error && (
+          {error && (
             <View className="mb-4 p-3 bg-red-100 rounded">
               <Text className="text-red-500">{error.message}</Text>
             </View>
           )}
-             {Object.keys(formik.errors).length > 0 && formik.submitCount > 0 && (
+          {Object.keys(formik.errors).length > 0 && formik.submitCount > 0 && (
             <View className="mb-4 p-3 bg-yellow-100 rounded">
               <Text className="text-yellow-700">Please fix the following errors:</Text>
               {Object.entries(formik.errors).map(([field, error]) => (
@@ -202,7 +257,7 @@ const AddExperience = () => {
             onChangeText={formik.handleChange('location')}
             onBlur={formik.handleBlur('location')}
           />
-          
+
           <DropdownComponent
             value={formik.values.country}
             onChange={(value) => formik.setFieldValue('country', value)}
@@ -210,58 +265,44 @@ const AddExperience = () => {
 
           <View className='flex flex-row items-center p-4'>
             <CustomCheckbox
-              checked={formik.values.currently_working}
-              onPress={() => formik.setFieldValue('currently_working', !formik.values.currently_working)}
+              initialValue={formik.values.currently_working}
+              onValueChange={(value) => formik.setFieldValue('currently_working', value)}
             />
             <Text className='text-[12px] ml-2'>I am currently working in this role</Text>
           </View>
 
           <Text className='text-[12px] mb-3'>Start Date and Month</Text>
-          <View className="flex-row space-x-4">
-            <View style={{ width: "50%" }}>
-              <Select
-                onSelect={(month) => {
-                  const startDate = formatDate(month, formik.values.start_date.split('-')[1] || '')
-                  formik.setFieldValue('start_date', startDate)
-                }}
+          <View>
+            <DateSelector
+              label="Start Date"
+              month={formik.values.start_date.month}
+              year={formik.values.start_date.year}
+              onMonthChange={(value) => formik.setFieldValue('start_date.month', value)}
+              onYearChange={(value) => formik.setFieldValue('start_date.year', value)}
+              error={
+                formik.touched.start_date?.month && formik.touched.start_date?.year
+                  ? formik.errors.start_date?.month || formik.errors.start_date?.year
+                  : undefined
+              }
+            />
+
+            {!formik.values.currently_working && (
+              <DateSelector
+                label="End Date"
+                month={formik.values.end_date.month}
+                year={formik.values.end_date.year}
+                onMonthChange={(value) => formik.setFieldValue('end_date.month', value)}
+                onYearChange={(value) => formik.setFieldValue('end_date.year', value)}
+                error={
+                  formik.touched.end_date?.month && formik.touched.end_date?.year
+                    ? formik.errors.end_date?.month || formik.errors.end_date?.year
+                    : undefined
+                }
               />
-            </View>
-            <View style={{ width: "50%" }}>
-              <Select
-                onSelect={(year) => {
-                  const startDate = formatDate(formik.values.start_date.split('-')[0] || '', year)
-                  formik.setFieldValue('start_date', startDate)
-                }}
-              />
-            </View>
+            )}
           </View>
-
-          {!formik.values.currently_working && (
-            <>
-              <Text className='text-[12px] my-3'>End Date and Month</Text>
-              <View className="flex-row space-x-4">
-                <View style={{ width: "50%" }}>
-                  <Select
-                    onSelect={(month) => {
-                      const endDate = formatDate(month, formik.values.end_date.split('-')[1] || '')
-                      formik.setFieldValue('end_date', endDate)
-                    }}
-                  />
-                </View>
-                <View style={{ width: "50%" }}>
-                  <Select
-                    onSelect={(year) => {
-                      const endDate = formatDate(formik.values.end_date.split('-')[0] || '', year)
-                      formik.setFieldValue('end_date', endDate)
-                    }}
-                  />
-                </View>
-              </View>
-            </>
-          )}
-
           <View className='mt-2'>
-            <InputField 
+            <InputField
               placeholder='Description'
               value={formik.values.description}
               onChangeText={formik.handleChange('description')}

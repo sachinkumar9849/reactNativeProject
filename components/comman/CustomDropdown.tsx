@@ -4,15 +4,16 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { gql, useQuery } from '@apollo/client';
 import { GET_CANDIDATE_LOCATIONS } from '@/app/apollo/queries';
 
-const DropdownComponent = () => {
-  const [value, setValue] = useState(null);
+
+
+const DropdownComponent = ({ value, onChange }) => {
   const { loading, error, data } = useQuery(GET_CANDIDATE_LOCATIONS);
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error loading data</Text>;
 
   // Map API response to dropdown format
-  const dropdownData = data.candidateLocations.map((location: any) => ({
+  const dropdownData = data.candidateLocations.map((location) => ({
     label: location.nicename,
     value: location.id,
   }));
@@ -26,11 +27,12 @@ const DropdownComponent = () => {
         valueField="value"
         placeholder="Select a country"
         value={value}
-        onChange={(item) => setValue(item.value)}
+        onChange={(item) => onChange(item.value)}  // Call onChange with selected value
       />
     </View>
   );
 };
+
 
 export default DropdownComponent;
 

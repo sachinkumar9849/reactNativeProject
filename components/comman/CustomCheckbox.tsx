@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, View, Text, StyleSheet, Animated } from 'react-native';
 
-const CustomCheckbox = ({ 
+const CustomCheckbox = ({
   label = '',
   initialValue = false,
-  onValueChange = () => {},
+  onValueChange = () => { },
   disabled = false,
   size = 18,
   borderColor = '#666',
