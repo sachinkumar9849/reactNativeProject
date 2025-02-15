@@ -32,26 +32,7 @@ interface AddExperienceInput {
   description: string
 }
 
-// Validation schema
-const validationSchema = Yup.object().shape({
-  title: Yup.string().required('Title is required'),
-  company: Yup.string().required('Company is required'),
-  location: Yup.string().required('Location is required'),
-  country: Yup.string().required('Country is required'),
-  start_date: Yup.object().shape({
-    month: Yup.string().required('Start month is required'),
-    year: Yup.string().required('Start year is required')
-  }),
-  end_date: Yup.object().when('currently_working', {
-    is: false,
-    then: Yup.object().shape({
-      month: Yup.string().required('End month is required'),
-      year: Yup.string().required('End year is required')
-    })
-  }),
-  description: Yup.string().required('Description is required'),
 
-})
 
 const ADD_EXPERIENCE = gql`
   mutation AddExperience($input: AddExperienceInput!) {
@@ -96,13 +77,13 @@ const AddExperience = () => {
         month: Yup.string().required('Start month is required'),
         year: Yup.string().required('Start year is required')
       }),
-      end_date: Yup.object().when('currently_working', {
-        is: false,
-        then: Yup.object().shape({
-          month: Yup.string().required('End month is required'),
-          year: Yup.string().required('End year is required')
-        })
-      }),
+      // end_date: Yup.object().when('currently_working', {
+      //   is: false,
+      //   then: Yup.object().shape({
+      //     month: Yup.string().required('End month is required'),
+      //     year: Yup.string().required('End year is required')
+      //   })
+      // }),
       description: Yup.string().required('Description is required'),
     }),
     onSubmit: async (values) => {
