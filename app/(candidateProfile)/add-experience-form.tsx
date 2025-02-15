@@ -168,16 +168,20 @@ const AddExperience = () => {
 
   const handleSubmit = () => {
     console.log("Submit button pressed");
-    console.log('Current form state:', {
-      values: formik.values,
-      errors: formik.errors,
-      isValid: formik.isValid
-    })
-    if (!formik.isValid) {
-      console.warn("Form validation failed:", formik.errors)
-      return
-    }
-    formik.handleSubmit()
+
+    // Touch all fields to trigger validation
+    formik.validateForm().then(errors => {
+      Object.keys(formik.values).forEach(key => {
+        formik.setFieldTouched(key, true);
+      });
+
+      if (Object.keys(errors).length > 0) {
+        console.warn("Form validation failed:", errors);
+        return;
+      }
+
+      formik.handleSubmit();
+    });
   }
 
   return (
@@ -219,7 +223,7 @@ const AddExperience = () => {
             onBlur={formik.handleBlur('title')}
           />
           {formik.touched.title && formik.errors.title && (
-            <Text className='text-red-500 text-xs'>{formik.errors.title}</Text>
+            <Text className='text-red-500 text-xs pt-0 mt-[-9px] mb-3'>{formik.errors.title}</Text>
           )}
 
           <InputField
@@ -229,7 +233,7 @@ const AddExperience = () => {
             onBlur={formik.handleBlur('company')}
           />
           {formik.touched.company && formik.errors.company && (
-            <Text className='text-red-500 text-xs'>{formik.errors.company}</Text>
+            <Text className='text-red-500 text-xs pt-0 mt-[-9px] mb-3'>{formik.errors.company}</Text>
           )}
 
           <InputField
@@ -238,6 +242,9 @@ const AddExperience = () => {
             onChangeText={formik.handleChange('location')}
             onBlur={formik.handleBlur('location')}
           />
+          {formik.touched.location && formik.errors.location && (
+            <Text className='text-red-500 text-xs pt-0 mt-[-9px] mb-3'>{formik.errors.location}</Text>
+          )}
 
           <DropdownComponent
             value={formik.values.country}
@@ -295,10 +302,10 @@ const AddExperience = () => {
             <TouchableOpacity
               style={[
                 styles.nextButton,
-                (!formik.isValid || loading) && styles.disabledButton
+                (!formik.isValid || Object.keys(formik.errors).length > 0 || loading) && styles.disabledButton
               ]}
               onPress={handleSubmit}
-              disabled={!formik.isValid || loading}
+              disabled={!formik.isValid || Object.keys(formik.errors).length > 0 || loading}
             >
               <Text style={styles.nextButtonText}>
                 {loading ? 'Adding...' : 'Add'}
