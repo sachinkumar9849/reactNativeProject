@@ -26,7 +26,7 @@ export default function Index() {
           />
           <View className="flex-row justify-center mt-4">
             <Text className="text-gray-600">New to Jobklik? </Text>
-            <Pressable onPress={() => router.push("/home")}>
+            <Pressable onPress={() => router.push("/sign-up")}>
               <Text className="text-primary">Sign up</Text>
             </Pressable>
           </View>

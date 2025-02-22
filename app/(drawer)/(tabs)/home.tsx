@@ -30,6 +30,7 @@ const Home = () => {
           style={styles.img}>
           <View className='flex-1 flex flex-row justify-between w-full'>
             <Image source={images.user} className='w-100 h-100' />
+            
             <Image source={images.notice} />
           </View>
 

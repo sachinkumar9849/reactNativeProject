@@ -1,8 +1,10 @@
 import { View, Text, Image } from 'react-native';
 import React from 'react';
+// import { DrawerToggleButton } from '@react-navigation/drawer';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { images } from '@/constants';
+import { DrawerToggleButton } from '@react-navigation/drawer';
 
 const TabsLayout = () => {
     return (
@@ -23,6 +25,7 @@ const TabsLayout = () => {
                         fontSize: 12,
                         fontWeight: '500',
                     },
+                    headerLeft: () => <DrawerToggleButton />,
                 }}>
                 <Tabs.Screen
                     name="home"
