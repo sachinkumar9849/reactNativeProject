@@ -33,7 +33,8 @@ import support from "@/assets/images/setting/support.png";
 import bills from "@/assets/images/setting/bills.png";
 import arrowIcon from "@/assets/images/setting/arrow.png";
 import logout from "@/assets/images/setting/logout.png";
+import settingUser from "@/assets/images/setting/user.png";
 
 
 
-export default {logout,arrowIcon,bills,support,password,certificationsSetting,subscriptionSetting,profile,angle,addArrow,addExperience,role,close,add,skills1,arrowBlack,message,home,planning3,planning2,planning1,quiz,users,startImg ,Login,Arrow,LoginVerify,verifiedEmail,phoneVerify,banner,user,notice,logoSmall,completeProfile,search};
+export default {settingUser,logout,arrowIcon,bills,support,password,certificationsSetting,subscriptionSetting,profile,angle,addArrow,addExperience,role,close,add,skills1,arrowBlack,message,home,planning3,planning2,planning1,quiz,users,startImg ,Login,Arrow,LoginVerify,verifiedEmail,phoneVerify,banner,user,notice,logoSmall,completeProfile,search};
