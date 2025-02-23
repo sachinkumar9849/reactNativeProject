@@ -42,7 +42,7 @@ const TabsLayout = () => {
                     name="message"
                     options={{
                         title: "Messages",
-                        headerShown: true,
+                        headerShown: false,
                         tabBarIcon: ({ focused }) => (
                             <Image 
                                
@@ -57,16 +57,7 @@ const TabsLayout = () => {
                         tabBarBadge: 3,
                     }}
                 />
-                <Tabs.Screen
-                    name="profile"
-                    options={{
-                        title: "Profile",
-                        headerShown: true,
-                        tabBarIcon: ({ focused, color, size }) => (
-                            <Image source={images.home}/>
-                        ),
-                    }}
-                />
+               
             </Tabs>
         </>
     );

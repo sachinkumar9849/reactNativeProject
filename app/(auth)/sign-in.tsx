@@ -144,9 +144,6 @@ const SignIn = () => {
           {formik.touched.is_agreement && formik.errors.is_agreement && (
             <Text style={styles.error}>{formik.errors.is_agreement}</Text>
           )}
-
-
-
           <TouchableOpacity style={styles.button} className='mt-5' onPress={formik.handleSubmit}>
             <Text style={styles.buttonText}>Sign In</Text>
           </TouchableOpacity>
@@ -165,8 +162,6 @@ const SignIn = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
-
   },
 
   title: {

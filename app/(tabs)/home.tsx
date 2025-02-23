@@ -22,6 +22,9 @@ const Home = () => {
   const handleResendCode = ()=>{
     router.push("/add-experience-form")
   }
+  const handleProfile = ()=>{
+    router.push("/profile")
+  }
   return (
     <SafeAreaView>
       <View className='flex-3'>
@@ -29,7 +32,9 @@ const Home = () => {
         <ImageBackground source={images.banner} resizeMode="cover" className='flex-1 p-10'
           style={styles.img}>
           <View className='flex-1 flex flex-row justify-between w-full'>
-            <Image source={images.user} className='w-100 h-100' />
+           <TouchableOpacity onPress={handleProfile}>
+           <Image source={images.user} className='w-100 h-100' />
+           </TouchableOpacity>
             
             <Image source={images.notice} />
           </View>

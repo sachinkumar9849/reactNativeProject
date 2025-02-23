@@ -32,7 +32,7 @@ export default function RootLayout() {
     <ApolloWrapper>
       <Stack >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+        <Stack.Screen name="(setting)" options={{ headerShown: false }} />
         
         <Stack.Screen name="(candidateProfile)" options={{ headerShown: false }} />
         <Stack.Screen
@@ -41,7 +41,9 @@ export default function RootLayout() {
             headerShown: false,
           }}
         />
+    
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        
         <Toast />
         
       </Stack>

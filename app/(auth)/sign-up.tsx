@@ -67,7 +67,7 @@ const SignUp = () => {
         } else {
           Alert.alert("Error", "Unexpected response");
         }
-        
+
 
       } catch (error) {
         console.error('Error:', error.response?.data || error.message);
@@ -91,7 +91,7 @@ const SignUp = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-<StatusBar  backgroundColor="#112D55" />
+        <StatusBar backgroundColor="#112D55" />
         <View className='relative'>
           <Image
             source={images.Login}
