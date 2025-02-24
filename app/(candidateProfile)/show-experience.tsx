@@ -96,10 +96,10 @@ const ShowExperience = () => {
                                     </Text>
                                     <Text className='text-[#433E3F] text-[12px]'>{experience.description}</Text>
                                 </View>
-                               <View className='flex flex-col items-end justify-items-end' style={styles.wrapBtn}>
-                                <Image className='mb-2' source={images.edit}/>
-                                <Image source={images.deleteBtn}/>
-                               </View>
+                                <View className='flex flex-col items-end justify-items-end' style={styles.wrapBtn}>
+                                    <Image className='mb-2' source={images.edit} />
+                                    <Image source={images.deleteBtn} />
+                                </View>
                             </View>
                         ))
                     )}
@@ -112,16 +112,17 @@ const ShowExperience = () => {
             </ScrollView>
             <View className='py-3 px-3 flex flex-row justify-between w-full bg-black' style={styles.nextButtonContainer}>
                 <TouchableOpacity
-                    style={styles.nextButton}
-                    onPress={handlePress}
+                    className=' p-0 px-[20px] py-[10px] rounded-md'
+                    onPress={()=>router.push("/add-education")}
+
                 >
-                    <Text style={styles.nextButtonText}>
+                    <Text className='text-[#1D4F95] font-semibold text-[16]'>
                         Skip
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.nextButton}
-                    onPress={handlePress}
+                    onPress={()=>router.push("/add-education")}
                 >
                     <Text style={styles.nextButtonText}>
                         Next
@@ -167,6 +168,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         borderRadius: 5,
     },
+
     nextButtonText: {
         color: '#fff',
         fontSize: 16,

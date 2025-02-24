@@ -11,6 +11,7 @@ const CandidateLayout = () => {
         <Stack.Screen name="add-experience" options={{ headerShown: false }}></Stack.Screen>
         <Stack.Screen name="add-experience-form" options={{ headerShown: false }}></Stack.Screen>
         <Stack.Screen name="show-experience" options={{ headerShown: false }}></Stack.Screen>
+        <Stack.Screen name="add-education" options={{ headerShown: false }}></Stack.Screen>
       </Stack>
 
     </>
