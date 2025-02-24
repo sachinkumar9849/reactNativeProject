@@ -13,6 +13,7 @@ import { useAuth } from '../hooks/useAuth'
 import DateSelector from '@/components/comman/DateSelector'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Toast from "react-native-toast-message";
+import { useNavigation } from 'expo-router'
 
 interface DateInput {
   month: string;
@@ -82,6 +83,7 @@ const AddExperience = () => {
   const [addExperience, { loading, error }] = useMutation<{ addExperience: AddExperienceResponse }>(ADD_EXPERIENCE)
   const { isAuthenticated } = useAuth();
   const [userId, seUserId] = useState<string | null>(null);
+  const navigation = useNavigation();
   useEffect(() => {
     const getUserData = async () => {
       try {
@@ -89,7 +91,7 @@ const AddExperience = () => {
         if (userDataString) {
           const userData = JSON.parse(userDataString);
           seUserId(userData.id || userData.userId || userData._id); // handle different possible ID keys
-    console.log(userData._id)
+          console.log(userData._id)
         }
       } catch (error) {
         // Handle error appropriately
@@ -107,7 +109,7 @@ const AddExperience = () => {
     initialValues: INITIAL_FORM_VALUES,
     validationSchema,
     onSubmit: async (values) => {
-      if(!userId){
+      if (!userId) {
         return;
       }
       try {
@@ -123,6 +125,7 @@ const AddExperience = () => {
         });
 
         if (response.data?.addExperience.success) {
+          navigation.navigate("add-experience")
           // TODO: Add success notification
           // TODO: Navigate to next screen or reset form
         }
@@ -156,20 +159,20 @@ const AddExperience = () => {
     <SafeAreaView className='flex-1'>
       <ScrollView className='bg-white px-7 pt-10'>
         <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
-        
+
         <Header />
         <ExperienceIntro />
-        
+
         <View className='mt-8'>
           <FormErrorMessages error={error} formErrors={formik.errors} submitCount={formik.submitCount} />
-          
+
           <FormFields formik={formik} />
 
-          <SubmitButton 
-            isValid={formik.isValid} 
-            errors={formik.errors} 
-            loading={loading} 
-            onSubmit={handleSubmit} 
+          <SubmitButton
+            isValid={formik.isValid}
+            errors={formik.errors}
+            loading={loading}
+            onSubmit={handleSubmit}
           />
         </View>
       </ScrollView>
@@ -245,7 +248,7 @@ const FormFields = ({ formik }) => (
 
     <WorkingStatusCheckbox formik={formik} />
     <DateSelectors formik={formik} />
-    
+
     <View className='mt-2'>
       <InputField
         placeholder='Description'
@@ -270,7 +273,7 @@ const WorkingStatusCheckbox = ({ formik }) => (
 
 const DateSelectors = ({ formik }) => (
   <View>
-   
+
     <DateSelector
       label="Start Date"
       month={formik.values.start_date.month}

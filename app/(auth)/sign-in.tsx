@@ -20,33 +20,12 @@ import { useAuth } from '../hooks/useAuth';
 
 const SignIn = () => {
   const navigation = useNavigation();
-  const { signIn , isAuthenticated, isLoading } = useAuth();
-
-  useEffect(()=>{
-    if(isAuthenticated && !isLoading){
-      router.replace("/home");
-    }
-  },[isAuthenticated, isLoading])
+  const { signIn, isAuthenticated, isLoading } = useAuth();
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Email is required'),
     password: Yup.string().required('Password is required'),
-
   });
-    // If still loading auth state, you might want to show a loading indicator
-    if (isLoading) {
-      return (
-        <View>
-          <Text>Loading...</Text>
-        </View>
-      );
-    }
-  
-    // If already authenticated, don't render the form at all
-    if (isAuthenticated) {
-      return null;
-    }
-
 
   const formik = useFormik({
     initialValues: {
@@ -69,10 +48,29 @@ const SignIn = () => {
           router.replace('/home');
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
+        Alert.alert("Error", "Failed to sign in. Please try again.");
       }
     },
   });
+
+  useEffect(() => {
+    if(isAuthenticated && !isLoading){
+      router.replace("/home");
+    }
+  }, [isAuthenticated, isLoading]);
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (isAuthenticated) {
+    return null;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -96,15 +94,15 @@ const SignIn = () => {
 
             <Text className='text-[32px] font-semibold text-[#EEEEEE] mb-3'>Sign in to your Account</Text>
             <View className='flex items-center flex-row'>
-              <Text className='text-[14px] font-normal text-[#EEEEEE]'>Don’t have an account?</Text>
-              <TouchableOpacity onPress={() => navigation.navigate("sign-in")}>
+              <Text className='text-[14px] font-normal text-[#EEEEEE]'>Don't have an account?</Text>
+              <TouchableOpacity onPress={() => navigation.navigate("sign-up")}>
                 <Text className="text-[#F3C074] text-[14px] font-semibold ml-1">Sign Up</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
-        <View className='p-5'>
 
+        <View className='p-5'>
           <TextInput
             style={styles.input}
             placeholder="Email"
@@ -127,6 +125,7 @@ const SignIn = () => {
           {formik.touched.password && formik.errors.password && (
             <Text style={styles.error}>{formik.errors.password}</Text>
           )}
+
           <View style={styles.checkboxContainer}>
             <TouchableOpacity
               style={styles.checkbox}
@@ -141,16 +140,23 @@ const SignIn = () => {
             </TouchableOpacity>
             <Text style={styles.checkboxLabel} className='text-[#6C7278]'>Remember me</Text>
           </View>
-          {formik.touched.is_agreement && formik.errors.is_agreement && (
-            <Text style={styles.error}>{formik.errors.is_agreement}</Text>
-          )}
-          <TouchableOpacity style={styles.button} className='mt-5' onPress={formik.handleSubmit}>
+
+          <TouchableOpacity 
+            style={styles.button} 
+            className='mt-5' 
+            onPress={formik.handleSubmit}
+          >
             <Text style={styles.buttonText}>Sign In</Text>
           </TouchableOpacity>
+
           <View className="mt-4 flex-row justify-center">
-            <Text className="text-[#0A0A0B] text-[14px] font-normal">Don’t have an account? </Text>
+            <Text className="text-[#0A0A0B] text-[14px] font-normal">
+              Don't have an account?{' '}
+            </Text>
             <TouchableOpacity onPress={() => navigation.navigate('sign-up')}>
-              <Text className="text-[#1D4F95] text-[14px] font-semibold">Sign Up</Text>
+              <Text className="text-[#1D4F95] text-[14px] font-semibold">
+                Sign Up
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -163,7 +169,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
