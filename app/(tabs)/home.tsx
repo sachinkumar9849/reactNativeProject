@@ -20,7 +20,7 @@ const Home = () => {
 
 
   const handleResendCode = ()=>{
-    router.push("/skills-select")
+    router.push("/show-experience")
   }
   const handleProfile = ()=>{
     router.push("/profile")

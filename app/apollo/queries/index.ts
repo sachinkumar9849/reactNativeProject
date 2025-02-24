@@ -26,3 +26,31 @@ export const GET_CANDIDATE_LOCATIONS = gql`
   }
 `;
 
+export const MY_DETAIL_QUERY = gql`
+  query MyDetail {
+    myDetail {
+      id
+      status
+      is_favourite
+      experiences {
+        id
+        candidate_id
+        title
+        company
+        location
+        currently_working
+        start_date
+        end_date
+        description
+        country {
+          id
+          iso
+          nicename
+          phonecode
+        }
+      }
+      user_id
+    }
+  }
+`;
+
