@@ -49,6 +49,16 @@ export const MY_DETAIL_QUERY = gql`
           phonecode
         }
       }
+      education{
+       id
+            school
+            degree
+            field_of_study
+            date_attended
+            graduated_date
+            description
+      }
+
       user_id
     }
   }

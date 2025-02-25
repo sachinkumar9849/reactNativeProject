@@ -7,11 +7,9 @@ import SkillTitle from '@/components/comman/SkillTitle'
 import CustomButton from '@/components/comman/CustomButton'
 
 const AddExperience = () => {
-    const handlePress = () => {
-        router.push("/add-experience-form")
-    }
+
     const AddExperience = () => {
-        router.push("/add-experience-form")
+        router.push("/add-education-form")
     }
 
     return (
@@ -43,7 +41,7 @@ const AddExperience = () => {
             <View className='py-3 px-3 flex flex-row justify-between w-full bg-black' style={styles.nextButtonContainer}>
                 <TouchableOpacity
                     className=' p-0 px-[20px] py-[10px] rounded-md'
-                    onPress={() => router.push("/add-education")}
+                    onPress={() => router.push("/show-education")}
 
                 >
                     <Text className='text-[#1D4F95] font-semibold text-[16]'>
@@ -52,7 +50,7 @@ const AddExperience = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.nextButton}
-                    onPress={() => router.push("/add-education")}
+                    onPress={() => router.push("/show-education")}
                 >
                     <Text style={styles.nextButtonText}>
                         Next
