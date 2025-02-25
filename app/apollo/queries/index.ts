@@ -17,6 +17,15 @@ export const ADD_ROLE = gql`
     }
   }
 `
+export const ADD_CERTIFICATE = gql`
+  mutation AddCertificate($input: CertificateInput!) {
+    addCertificate(input: $input) {
+      success
+      message
+    }
+  }
+`;
+
 export const GET_CANDIDATE_LOCATIONS = gql`
   query CandidateLocations {
     candidateLocations {
