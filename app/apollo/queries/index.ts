@@ -73,3 +73,17 @@ export const MY_DETAIL_QUERY = gql`
   }
 `;
 
+
+export const CANDIDATE_CERTIFICATION = gql`
+  query CandidateCertification {
+    CandidateCertification {
+      id
+        name
+        organization
+        issued_date
+        expiry_date
+        credential_id
+        credential_url
+    }
+  }
+`;
