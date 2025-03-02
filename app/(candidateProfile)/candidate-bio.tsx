@@ -81,7 +81,7 @@ const CandidateBio = () => {
         <View>
           <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
           <View className="flex flex-row items-center">
-            <TouchableOpacity onPress={() => router.push("/show-certifications")}>
+            <TouchableOpacity onPress={() => router.push("/languageAdd")}>
               <Image source={images.arrowBlack} width={33} height={33} />
             </TouchableOpacity>
             <Text className='text-[#262626] font-bold ml-5 text-[18px]'>Setup your profile</Text>
@@ -122,6 +122,15 @@ const CandidateBio = () => {
 
       <View className='py-3 px-3 flex flex-row justify-between w-full bg-white' style={styles.nextButtonContainer}>
         <TouchableOpacity
+          className=' p-0 px-[20px] py-[10px] rounded-md'
+          onPress={() => router.push("/show-certifications")}
+
+        >
+          <Text className='text-[#1D4F95] font-semibold text-[16]'>
+            Skip
+          </Text>
+        </TouchableOpacity>s
+        <TouchableOpacity
           style={[
             styles.nextButton,
             (!hasMinimumChars || loading) && styles.disabledButton
@@ -130,7 +139,7 @@ const CandidateBio = () => {
           disabled={!hasMinimumChars || loading}
         >
           <Text style={styles.nextButtonText}>
-            {loading ? 'Submitting...' : 'Submit'}
+            {loading ? 'Submitting...' : 'Next'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -172,7 +181,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
-    width: '100%',
+
     alignItems: 'center',
   },
   disabledButton: {
