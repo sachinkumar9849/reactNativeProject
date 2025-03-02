@@ -92,7 +92,7 @@ const ShowExperience = () => {
             <View className='py-3 px-3 flex flex-row justify-between w-full bg-black' style={styles.nextButtonContainer}>
                 <TouchableOpacity
                     className=' p-0 px-[20px] py-[10px] rounded-md'
-                    onPress={() => router.push("/certifications-add")}
+                    onPress={() => router.push("/languageAdd")}
 
                 >
                     <Text className='text-[#1D4F95] font-semibold text-[16]'>
@@ -101,7 +101,7 @@ const ShowExperience = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.nextButton}
-                    onPress={() => router.push("/certifications-add")}
+                    onPress={() => router.push("/languageAdd")}
                 >
                     <Text style={styles.nextButtonText}>
                         Next
