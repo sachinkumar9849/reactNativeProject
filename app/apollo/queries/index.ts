@@ -87,3 +87,94 @@ export const CANDIDATE_CERTIFICATION = gql`
     }
   }
 `;
+export const GET_CANDIDATE_DETAIL = gql`
+  query CandidateDetail($candidateId: ID!) {
+    candidateDetail(candidateId: $candidateId) {
+      success
+      message
+      data {
+        id
+        user_id
+        first_name
+        last_name
+        phone
+        status
+        is_favourite
+         profile {
+                id
+                dob
+                street
+                city
+                state
+                postal_code
+                photo
+                role
+                bio
+                points
+                experience_years
+            }
+        skills {
+          id
+          name
+        }
+        experiences {
+          id
+          candidate_id
+          title
+          company
+          location
+          currently_working
+          start_date
+          end_date
+          description
+          country {
+            id
+            iso
+            nicename
+            phonecode
+          }
+        }
+        education {
+          id
+          school
+          degree
+          field_of_study
+          date_attended
+          graduated_date
+          description
+        }
+        certifications {
+          id
+          name
+          organization
+          issued_date
+          expiry_date
+          credential_id
+          credential_url
+        }
+        languages {
+          id
+          language
+          proficiency
+        }
+        user {
+          id
+          username
+          email
+          company_id
+          user_type
+          status
+          candidate {
+            id
+            user_id
+            first_name
+            last_name
+            phone
+            status
+            is_favourite
+          }
+        }
+      }
+    }
+  }
+`;
