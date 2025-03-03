@@ -1,12 +1,25 @@
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { images } from '@/constants';
-import { useNavigation } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
+import { useAuth } from '../hooks/useAuth';
 
 const loginImage = require('../../assets/images/login.png');
 
 const Profile = () => {
   const navigation = useNavigation();
+  const {logout} = useAuth();
+
+  const handleLogout = async () => {
+    try {
+        await logout();
+        router.replace("/");
+    } catch (error) {
+        // Handle logout error
+    }
+};
+
+  
   return (
     <View>
       <ImageBackground
@@ -73,10 +86,12 @@ const Profile = () => {
 
       </View>
       <View className='mt-10 p-4 flex flex-row justify-between bg-white border-b border-[#E6E6E6]'>
-        <View className='flex flex-row'>
+        
+          <TouchableOpacity onPress={handleLogout} className='flex flex-row w-full'>
           <Image source={images.logout} resizeMode='contain' />
           <Text className='ml-3 text-[#E4626F] text-[14px] font-semibold'>Log Out</Text>
-        </View>
+          </TouchableOpacity>
+     
 
       </View>
     </View>

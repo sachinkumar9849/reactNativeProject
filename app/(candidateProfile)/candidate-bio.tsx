@@ -123,13 +123,13 @@ const CandidateBio = () => {
       <View className='py-3 px-3 flex flex-row justify-between w-full bg-white' style={styles.nextButtonContainer}>
         <TouchableOpacity
           className=' p-0 px-[20px] py-[10px] rounded-md'
-          onPress={() => router.push("/show-certifications")}
+          onPress={() => router.push("/candidate-detail")}
 
         >
           <Text className='text-[#1D4F95] font-semibold text-[16]'>
             Skip
           </Text>
-        </TouchableOpacity>s
+        </TouchableOpacity>
         <TouchableOpacity
           style={[
             styles.nextButton,
