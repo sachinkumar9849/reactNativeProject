@@ -20,6 +20,7 @@ const CandidateLayout = () => {
         <Stack.Screen name="languageAdd" options={{ headerShown: false }}></Stack.Screen>
         <Stack.Screen name="candidate-bio" options={{ headerShown: false }}></Stack.Screen>
         <Stack.Screen name="search-language" options={{ headerShown: false }}></Stack.Screen>
+        <Stack.Screen name="candidate-detail" options={{ headerShown: false }}></Stack.Screen>
       </Stack>
 
     </>
